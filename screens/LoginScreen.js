@@ -1,12 +1,29 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { Keyboard, StyleSheet, Text, View } from 'react-native';
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
-import { useState } from 'react/cjs/react.production.min';
+import { useState } from 'react';
+import firebase from "../database/firebaseDB";
 
-export default function LoginScreen() {
+const auth = firebase.auth();
+
+export default function LoginScreen( {navigation} ) {
 
     const [email, setEmail] = useState("");
     const [password,setPassword] = useState("");
+    const [errorText, setErrorText] = useState("");
+
+    function login() {
+        Keyboard.dismiss();
+        auth
+        .signInWithEmailAndPassword(email, password)
+        .then(() => {
+            console.log("Signed in!");
+        })
+        .catch((error) => {
+            console.log("Error");
+            setErrorText(error.message);
+        });
+    }
 
     return (
         <View style={styles.container}>
@@ -27,9 +44,10 @@ export default function LoginScreen() {
             value={password}
             onChangeText={(text) => setPassword(text)}
             />
-            <TouchableOpacity style={styles.loginButton} onPress={null}>            
+            <TouchableOpacity style={styles.loginButton} onPress={login}>            
                 <Text style={styles.buttonText}>Log In</Text>
             </TouchableOpacity>
+            <Text style={styles.errorText}> {errorText} </Text>
         </View>
     );
 }
@@ -52,10 +70,10 @@ const styles = StyleSheet.create({
   },
   input: {
       width: "80%",
-      borderColor: "999",
+      borderColor: "#999",
       borderWidth: 1,
       marginBottom: 24,
-      padding: 4,
+      padding: 5,
       height: 36,
       fontSize: 18,
       backgroundColor: "white",
@@ -72,5 +90,9 @@ const styles = StyleSheet.create({
       color: "white",
       fontWeight: "bold",
       fontSize: 18,
+  },
+  errorText: {
+      color: "tomato",
+      marginHorizontal: 30,
   },
 });

@@ -2,17 +2,17 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import ChatScreen from './.expo-shared/screens/ChatScreen';
-import LoginScreen from './.expo-shared/screens/LoginScreen';
+import ChatScreen from './screens/ChatScreen';
+import LoginScreen from './screens/LoginScreen';
 
 const Stack = createStackNavigator();
 
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen name= "Login" component={LoginScreen} />
+      <Stack.Navigator screenOptions={{ presentation: "modal" }}>
         <Stack.Screen name= "Chat" component={ChatScreen} />
+        <Stack.Screen name= "Login" component={LoginScreen} />
       </Stack.Navigator>
 
     </NavigationContainer>
